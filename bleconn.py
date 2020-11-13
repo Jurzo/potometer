@@ -31,7 +31,10 @@ def scan():
         f = open("result.txt", "r")
         lines = f.read().strip().split("\n")
         if len(lines) > 1:
-            return lines[1:len(lines)]
+            addrs = []
+            for line in lines[1:len(lines)]:
+                addrs.append(line.split(" ")[0])
+            return addrs
     except:
         print("unable to open file")
     return []
