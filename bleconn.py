@@ -17,10 +17,13 @@ def readSensors(sensors):
                     device = adapter.connect(sensor[0])
                     reading = int.from_bytes(device.char_read(sensor[1]), "little")
                     values[index] = reading
+                except KeyboardInterrupt:
+                    exit()
                 except:
-                    print("Failed to read from device: ", sensor)
-        time.sleep(0.1)
+                    print("Round:", i, "Failed to read from device: ", sensor)
         i += 1
     adapter.stop()
 
     return values
+
+print(readSensors(db.getSensors()))

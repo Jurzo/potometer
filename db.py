@@ -71,3 +71,4 @@ def getReadings():
     else:
         conn.close()
     return readings
+
