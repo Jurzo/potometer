@@ -1,5 +1,6 @@
 import pygatt
 import time
+import subprocess
 
 adapter = pygatt.GATTToolBackend()
 
@@ -19,10 +20,18 @@ def readSensors(sensors):
                 except KeyboardInterrupt:
                     exit()
                 except:
-                    print("Failed to read from device: ", sensor)
+                    print("Round:", i, "Failed to read from device: ", sensor)
         i += 1
     adapter.stop()
     return values
 
 def scan():
-    
+    subprocess.call("./scanner.sh")
+    try:
+        f = open("result.txt", "r")
+        lines = f.read().strip().split("\n")
+        if len(lines) > 1:
+            return lines[1:len(lines)]
+    except:
+        print("unable to open file")
+    return []
