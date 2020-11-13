@@ -26,6 +26,8 @@ def getSensors():
             print(err)
     else:
         conn.close()
+    for i in sensors:
+        print(i)
     return sensors
 
 def insertReading(uuid, value=-1):

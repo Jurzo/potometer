@@ -38,3 +38,6 @@ def scan():
     except:
         print("unable to open file")
     return []
+
+for i in scan():
+    print(i)
