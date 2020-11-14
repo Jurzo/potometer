@@ -1,23 +1,3 @@
-/*
-Simple Deep Sleep with Timer Wake Up
-=====================================
-ESP32 offers a deep sleep mode for effective power
-saving as power is an important factor for IoT
-applications. In this mode CPUs, most of the RAM,
-and all the digital peripherals which are clocked
-from APB_CLK are powered off. The only parts of
-the chip which can still be powered on are:
-RTC controller, RTC peripherals ,and RTC memories
-
-This code displays the most basic deep sleep with
-a timer to wake it up and how to store data in
-RTC memory to use it over reboots
-
-This code is under Public Domain License.
-
-Author:
-Pranav Cherukupalli <cherukupallip@gmail.com>
-*/
 #include <BLEDevice.h>
 #include <BLEUtils.h>
 #include <BLEServer.h>
@@ -51,9 +31,10 @@ void print_wakeup_reason(){
 }
 
 class CharCallbacks: public BLECharacteristicCallbacks {
-    void onRead(BLECharacteristic* pCharacteristic) {
-        Serial.println("Char read");
-        esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR - millis() * 1000);
+    void onWrite(BLECharacteristic* pCharacteristic) {
+        Serial.println("Char written");
+        Serial.println(millis() / 1000.0);
+        esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);
         esp_deep_sleep_start();
     };
 };
@@ -75,7 +56,8 @@ void setup(){
     BLECharacteristic *sensorCharacteristic = pService->createCharacteristic(
                                             SENSOR_UUID,
                                             BLECharacteristic::PROPERTY_READ |
-                                            BLECharacteristic::PROPERTY_WRITE
+                                            BLECharacteristic::PROPERTY_WRITE |
+                                            BLECharacteristic::PROPERTY_NOTIFY
                                         );
     sensorCharacteristic->setCallbacks(new CharCallbacks());
     sensorCharacteristic->setValue(bootCount);
