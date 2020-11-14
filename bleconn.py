@@ -38,3 +38,15 @@ def scan():
     except:
         print("unable to open file")
     return []
+
+def scanTool():
+    try:
+        adapter.start()
+        addrs = [device['address'] for device in adapter.scan()]
+        adapter.stop()
+        return addrs
+    except:
+        print("Scan failed")
+        return []
+
+print(scanTool())

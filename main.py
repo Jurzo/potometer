@@ -3,7 +3,8 @@ import db
 import time
 
 while 1:
-    availableDevices = bleconn.scan()
+    availableDevices = bleconn.scanTool()
+    print(availableDevices)
     dbSensors = db.getSensors()
     matches = [device for device in dbSensors if device[0] in availableDevices]
     if matches:
