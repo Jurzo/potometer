@@ -18,12 +18,7 @@ def getSensors():
         for item in cur:
             sensors.append(item)
     except mysql.connector.Error as err:
-        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-            print("Something is wrong with your user name or password")
-        elif err.errno == errorcode.ER_BAD_DB_ERROR:
-            print("Database does not exist")
-        else:
-            print(err)
+        print(err)
     else:
         conn.close()
     return sensors
@@ -39,12 +34,7 @@ def insertReading(uuid, value=-1):
         conn.commit()
         return True
     except mysql.connector.Error as err:
-        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-            print("Something is wrong with your user name or password")
-        elif err.errno == errorcode.ER_BAD_DB_ERROR:
-            print("Database does not exist")
-        else:
-            print(err)
+        print(err)
     else:
         conn.close()
     return False
@@ -62,12 +52,7 @@ def getReadings():
         for item in cur:
             readings.append(item)
     except mysql.connector.Error as err:
-        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-            print("Something is wrong with your user name or password")
-        elif err.errno == errorcode.ER_BAD_DB_ERROR:
-            print("Database does not exist")
-        else:
-            print(err)
+        print(err)
     else:
         conn.close()
     return readings
