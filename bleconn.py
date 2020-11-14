@@ -48,5 +48,3 @@ def scanTool():
     except:
         print("Scan failed")
         return []
-
-print(scanTool())
