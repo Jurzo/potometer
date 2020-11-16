@@ -33,15 +33,15 @@ class SheetDriver:
     def read(self):
         # Call the Sheets API
         sheet = self.service.spreadsheets()
-        result_input = sheet.values().get(spreadsheetId=self.ID, range=self.RANGE).execute()
-        values_input = result_input.get('values', [])
+        result = sheet.values().get(spreadsheetId=self.ID, range=self.RANGE).execute()
+        values = result.get('values', [])
 
-        self.rows = len(values_input)
-        self.columns = len(values_input[0]-1)
+        self.rows = len(values)
+        self.columns = 0 if self.rows == 0 else len(values[0])
 
-        if not values_input:
+        if not values:
             print('No data found.')
-        return values_input
+        return values
 
     def Export_Data_To_Sheets(self, df, torange):
         self.service.spreadsheets().values().update(
