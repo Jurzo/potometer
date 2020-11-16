@@ -27,7 +27,6 @@ def insertReading(uuid, value=-1):
     try:
         conn = mysql.connector.connect(**config)
         cur = conn.cursor()
-        print(uuid,value)
         if value == -1:
             cur.execute("INSERT INTO reading (uuid, dt) VALUES (%s, NOW())", (uuid))
         else:
