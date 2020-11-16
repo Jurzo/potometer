@@ -7,11 +7,11 @@ import pickle
 
 class SheetDriver:
     def __init__(self):
-        SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
-        ID = '1kCCLRpFxTEChTQeAWq_ndqPykZ9qz3Ab3mxZC1vQUx0'
-        RANGE = 'A:DDD'
-        rows = 0
-        columns = 0
+        self.SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
+        self.ID = '1kCCLRpFxTEChTQeAWq_ndqPykZ9qz3Ab3mxZC1vQUx0'
+        self.RANGE = 'A:DDD'
+        self.rows = 0
+        self.columns = 0
 
     def createService(self):
         creds = None
