@@ -9,7 +9,7 @@ SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 
 # here enter the id of your google sheet
 ID = '1kCCLRpFxTEChTQeAWq_ndqPykZ9qz3Ab3mxZC1vQUx0'
-SAMPLE_RANGE_NAME = 'A1:C11'
+SAMPLE_RANGE_NAME = 'A:DDD'
 
 def createService():
     global service
@@ -33,8 +33,8 @@ def read():
     # Call the Sheets API
     sheet = service.spreadsheets()
     result_input = sheet.values().get(spreadsheetId=ID, range=SAMPLE_RANGE_NAME).execute()
-    records_data = sheet.get_all_records()
-    values_input = records_data.get('values', [])
+    values_input = result_input.get('values', [])
+    print(len(values_input))
 
     if not values_input:
         print('No data found.')
