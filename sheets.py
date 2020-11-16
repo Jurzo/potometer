@@ -60,9 +60,9 @@ class SheetDriver:
                 row[(i-1) * 4 + 1] = headers[i]
 
         else:
-            row = self.data[0] + [""]* ((len(headers)-1) * 4 + 1)
-            for i in range(len(self.data[0]), len(headers)):
-                row[(i-1) * 4 + 1] = headers[i]
+            row = self.data[0] + [""] * (len(headers) * 4)
+            for i in range(len(headers)):
+                row[len(self.data[0]) + 4*i + 3] = headers[i]
 
         self.service.spreadsheets().values().update(
             spreadsheetId=self.ID,
