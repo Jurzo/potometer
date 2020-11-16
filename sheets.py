@@ -8,7 +8,7 @@ import pickle
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 
 # here enter the id of your google sheet
-SAMPLE_SPREADSHEET_ID_input = '1kCCLRpFxTEChTQeAWq_ndqPykZ9qz3Ab3mxZC1vQUx0'
+ID = '1kCCLRpFxTEChTQeAWq_ndqPykZ9qz3Ab3mxZC1vQUx0'
 SAMPLE_RANGE_NAME = 'A1:C11'
 
 def createService():
@@ -32,17 +32,17 @@ def createService():
 def read():
     # Call the Sheets API
     sheet = service.spreadsheets()
-    result_input = sheet.values().get(spreadsheetId=SAMPLE_SPREADSHEET_ID_input,
+    result_input = sheet.values().get(spreadsheetId=ID,
                                 range=SAMPLE_RANGE_NAME).execute()
     values_input = result_input.get('values', [])
 
-    if not values_input and not values_expansion:
+    if not values_input:
         print('No data found.')
     return values_input
 
 def Export_Data_To_Sheets(df, torange):
     response_date = service.spreadsheets().values().update(
-        spreadsheetId=gsheetId,
+        spreadsheetId=ID,
         valueInputOption='RAW',
         range=torange,
         body=dict(
