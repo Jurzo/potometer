@@ -32,9 +32,9 @@ def createService():
 def read():
     # Call the Sheets API
     sheet = service.spreadsheets()
-    result_input = sheet.values().get(spreadsheetId=ID,
-                                range=SAMPLE_RANGE_NAME).execute()
-    values_input = result_input.get('values', [])
+    result_input = sheet.values().get(spreadsheetId=ID, range=SAMPLE_RANGE_NAME).execute()
+    records_data = sheet.get_all_records()
+    values_input = records_data.get('values', [])
 
     if not values_input:
         print('No data found.')
@@ -57,4 +57,4 @@ x = read()
 df=pd.DataFrame(x[1:], columns=x[0])
 print(df)
 print(x)
-Export_Data_To_Sheets(df, 'A2:C12')
+#Export_Data_To_Sheets(df, 'A2:C12')
