@@ -54,7 +54,7 @@ class SheetDriver:
         print('Sheet successfully Updated')
 
     def addHeaders(self, headers):
-        if self.data:
+        if not self.data:
             row = [""] * ((len(headers)-1) * 4 + 1)
             for i in range(len(headers)):
                 row[(i-1) * 4 + 1] = headers[i]
@@ -63,14 +63,14 @@ class SheetDriver:
             row = self.data[0] + [""] * (len(headers) * 4)
             for i in range(len(headers)):
                 row[len(self.data[0]) + 4*i + 3] = headers[i]
-
+        print(row)
         self.service.spreadsheets().values().update(
             spreadsheetId=self.ID,
             valueInputOption='RAW',
-            range='A:DDDD',
+            range=self.RANGE,
             body=dict(
                 majorDimension='ROWS',
-                values=row)
+                values=[row])
         ).execute()
 
 if __name__ == '__main__':
