@@ -1,4 +1,3 @@
-import pandas as pd
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow,Flow
 from google.auth.transport.requests import Request
@@ -34,14 +33,14 @@ class SheetDriver:
         # Call the Sheets API
         sheet = self.service.spreadsheets()
         result = sheet.values().get(spreadsheetId=self.ID, range=self.RANGE).execute()
-        values = result.get('values', [])
+        self.data = result.get('values', [])
 
-        self.rows = len(values)
-        self.columns = 0 if self.rows == 0 else len(values[0])
+        self.rows = len(self.data)
+        self.columns = 0 if self.rows == 0 else len(self.data[0])
 
-        if not values:
+        if not self.data:
             print('No data found.')
-        return values
+        return self.data
 
     def Export_Data_To_Sheets(self, df, torange):
         self.service.spreadsheets().values().update(
@@ -54,10 +53,32 @@ class SheetDriver:
         ).execute()
         print('Sheet successfully Updated')
 
-driver = SheetDriver()
-driver.createService()
-print(driver.read())
-print(driver.rows, driver.columns)
+    def addHeaders(self, headers):
+        if self.data:
+            row = [""] * ((len(headers)-1) * 4 + 1)
+            for i in range(len(headers)):
+                row[(i-1) * 4 + 1] = headers[i]
+
+        else:
+            row = self.data[0] + [""]* ((len(headers)-1) * 4 + 1)
+            for i in range(len(self.data[0]), len(headers)):
+                row[(i-1) * 4 + 1] = headers[i]
+
+        self.service.spreadsheets().values().update(
+            spreadsheetId=self.ID,
+            valueInputOption='RAW',
+            range='A:DDDD',
+            body=dict(
+                majorDimension='ROWS',
+                values=row)
+        ).execute()
+
+if __name__ == '__main__':
+    driver = SheetDriver()
+    driver.createService()
+    print(driver.read())
+    print(driver.rows, driver.columns)
+    driver.addHeaders(["yksi", "kaksi"])
 
 
 #createService()
