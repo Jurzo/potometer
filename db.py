@@ -25,6 +25,20 @@ def getSensors():
         print(err)
     return sensors
 
+def getNames():
+    names = []
+    try:
+        conn = mysql.connector.connect(**config)
+        cur = conn.cursor()
+        cur.execute("select name from sensors")
+        for item in cur:
+            names.append(item)
+        
+        conn.close()
+    except mysql.connector.Error as err:
+        print(err)
+    return names
+
 def insertReading(uuid, value=-1):
     try:
         conn = mysql.connector.connect(**config)
@@ -49,10 +63,10 @@ def getReadings():
             from sensors s 
             join characteristics c on s.mac = c.mac 
             left join reading r on r.uuid = c.uuid 
-            order by r.dt desc
+            order by s.name, r.dt desc
             limit 100""")
         for item in cur:
-            readings.append([item[0], item[1].strftime("%d/%m/%Y"), item[2:]])
+            readings.append([item[0][0], item[0][1].strftime("%d/%m/%Y"), item[0][2], item[0][3]])
         
         conn.close()
     except mysql.connector.Error as err:
