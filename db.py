@@ -1,4 +1,6 @@
 import mysql.connector
+import pandas as pd
+import datetime
 
 config = {
   'user': 'raspi',
@@ -17,10 +19,10 @@ def getSensors():
         cur.execute("select s.mac, c.uuid from sensors s join characteristics c on s.mac = c.mac")
         for item in cur:
             sensors.append(item)
+        
+        conn.close()
     except mysql.connector.Error as err:
         print(err)
-    else:
-        conn.close()
     return sensors
 
 def insertReading(uuid, value=-1):
@@ -32,11 +34,10 @@ def insertReading(uuid, value=-1):
         else:
             cur.execute("INSERT INTO reading (uuid, dt, value) VALUES (%s, NOW(), %s)", (uuid, value))
         conn.commit()
+        conn.close()
         return True
     except mysql.connector.Error as err:
         print(err)
-    else:
-        conn.close()
     return False
 
 def getReadings():
@@ -48,12 +49,13 @@ def getReadings():
             from sensors s 
             join characteristics c on s.mac = c.mac 
             left join reading r on r.uuid = c.uuid 
-            order by r.dt""")
+            order by r.dt desc
+            limit 100""")
         for item in cur:
-            readings.append(item)
+            readings.append([item[0], item[1].strftime("%d/%m/%Y"), item[2:]])
+        
+        conn.close()
     except mysql.connector.Error as err:
         print(err)
-    else:
-        conn.close()
     return readings
 
