@@ -10,11 +10,10 @@ def upload(headers, data):
     sheetDriver.clear()
     sheetDriver.addHeaders(headers)
     for i, df in enumerate(data):
-        sheetDriver.Export_Data_To_Sheets(df, sheetDriver.colnum_string(i*4+1))
+        sheetDriver.Export_Data_To_Sheets(df, sheetDriver.colnum_string(i*4+1)+"2:DDD")
 
 
 
-        
 def todf(list):
     lastIndex = 0
     current = list[0][0]
@@ -26,12 +25,13 @@ def todf(list):
             lastIndex = i
         if (i == len(list) - 1):
             dataframes.append(pd.DataFrame([n[1:] for n in list[lastIndex:len(list)]], columns=["date", "hour", "value"]))
-
+    for frame in dataframes:
+        frame.set_index('date', inplace=True)
     return dataframes
 
 a = [['First sensor', '16/11/2020', 17, 0], ['First sensor', '16/11/2020', 17, 0], ['First sensor', '16/11/2020', 17, 0], ['First sensor', '16/11/2020', 17, 0], ['Second sensor', '16/11/2020', 17, 0], ['Second sensor', '16/11/2020', 17, 0], ['Second sensor', '16/11/2020', 17, 0]]
 
-upload(todf(a), ['First sensor', 'Second sensor'])
+upload(['First sensor', 'Second sensor'], todf(a))
 
 """ while 1:
     availableDevices = bleconn.scanTool()

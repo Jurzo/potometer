@@ -12,7 +12,7 @@ class SheetDriver:
         self.rows = 0
         self.columns = 0
 
-    def colnum_string(n):
+    def colnum_string(self, n):
         string = ""
         while n > 0:
             n, remainder = divmod(n - 1, 26)
@@ -52,7 +52,7 @@ class SheetDriver:
     def clear(self):
         self.service.spreadsheets().values().batchClear(
             spreadsheetId=self.ID,
-            range=self.RANGE
+            body={'ranges':[self.RANGE]}
         ).execute()
 
     def Export_Data_To_Sheets(self, df, torange):        
@@ -62,15 +62,15 @@ class SheetDriver:
             range=torange,
             body=dict(
                 majorDimension='ROWS',
-                values=df.reset_index().values.tolist())
+                values=[df.columns.tolist()] + df.reset_index().values.tolist())
         ).execute()
         print('Sheet successfully Updated')
 
 
     def addHeaders(self, headers):
-        row = [""] * ((len(headers)-1) * 4 + 1)
+        row = [""] * ((len(headers)) * 4 + 1)
         for i in range(len(headers)):
-            row[i * 4 + 1] = headers[i]
+            row[i * 4] = headers[i]
 
         self.columns = len(row)+2
                 
