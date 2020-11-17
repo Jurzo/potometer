@@ -29,9 +29,7 @@ def todf(list):
         frame.set_index('date', inplace=True)
     return dataframes
 
-a = [['First sensor', '16/11/2020', 17, 0], ['First sensor', '16/11/2020', 17, 0], ['First sensor', '16/11/2020', 17, 0], ['First sensor', '16/11/2020', 17, 0], ['Second sensor', '16/11/2020', 17, 0], ['Second sensor', '16/11/2020', 17, 0], ['Second sensor', '16/11/2020', 17, 0]]
-
-upload(['First sensor', 'Second sensor'], todf(a))
+upload(db.getNames(), todf(db.getReadings()))
 
 """ while 1:
     availableDevices = bleconn.scanTool()
