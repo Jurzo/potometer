@@ -12,6 +12,13 @@ class SheetDriver:
         self.rows = 0
         self.columns = 0
 
+    def colnum_string(n):
+        string = ""
+        while n > 0:
+            n, remainder = divmod(n - 1, 26)
+            string = chr(65 + remainder) + string
+        return string
+
     def createService(self):
         creds = None
         if os.path.exists('token.pickle'):
@@ -42,28 +49,31 @@ class SheetDriver:
             print('No data found.')
         return self.data
 
-    def Export_Data_To_Sheets(self, df, torange):
+    def clear(self):
+        self.service.spreadsheets().values().batchClear(
+            spreadsheetId=self.ID,
+            range=self.RANGE
+        ).execute()
+
+    def Export_Data_To_Sheets(self, df, torange):        
         self.service.spreadsheets().values().update(
             spreadsheetId=self.ID,
             valueInputOption='RAW',
             range=torange,
             body=dict(
                 majorDimension='ROWS',
-                values=df.T.reset_index().T.values.tolist())
+                values=df.reset_index().values.tolist())
         ).execute()
         print('Sheet successfully Updated')
 
-    def addHeaders(self, headers):
-        if not self.data:
-            row = [""] * ((len(headers)-1) * 4 + 1)
-            for i in range(len(headers)):
-                row[(i-1) * 4 + 1] = headers[i]
 
-        else:
-            row = self.data[0] + [""] * (len(headers) * 4)
-            for i in range(len(headers)):
-                row[len(self.data[0]) + 4*i + 3] = headers[i]
-        print(row)
+    def addHeaders(self, headers):
+        row = [""] * ((len(headers)-1) * 4 + 1)
+        for i in range(len(headers)):
+            row[i * 4 + 1] = headers[i]
+
+        self.columns = len(row)+2
+                
         self.service.spreadsheets().values().update(
             spreadsheetId=self.ID,
             valueInputOption='RAW',
