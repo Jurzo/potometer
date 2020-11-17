@@ -25,8 +25,6 @@ def todf(list):
             lastIndex = i
         if (i == len(list) - 1):
             dataframes.append(pd.DataFrame([n[1:] for n in list[lastIndex:len(list)]], columns=["date", "hour", "value"]))
-    for frame in dataframes:
-        frame.set_index('date', inplace=True)
     return dataframes
 
 counter = 0

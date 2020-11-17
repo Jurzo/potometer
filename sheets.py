@@ -62,7 +62,7 @@ class SheetDriver:
             range=torange,
             body=dict(
                 majorDimension='ROWS',
-                values=[df.columns.tolist()] + df.reset_index().values.tolist())
+                values=[df.columns.tolist()] + df.values.tolist())
         ).execute()
         print('Sheet successfully Updated')
 
