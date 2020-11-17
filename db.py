@@ -32,7 +32,7 @@ def getNames():
         cur = conn.cursor()
         cur.execute("select name from sensors")
         for item in cur:
-            names.append(item)
+            names.append(item[0])
         
         conn.close()
     except mysql.connector.Error as err:
@@ -66,8 +66,8 @@ def getReadings():
             order by s.name, r.dt desc
             limit 100""")
         for item in cur:
-            readings.append([item[0][0], item[0][1].strftime("%d/%m/%Y"), item[0][2], item[0][3]])
-        
+            readings.append([item[0], item[1].strftime("%d/%m/%Y"), item[2], item[3]])
+
         conn.close()
     except mysql.connector.Error as err:
         print(err)

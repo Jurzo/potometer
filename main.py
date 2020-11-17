@@ -29,6 +29,7 @@ def todf(list):
         frame.set_index('date', inplace=True)
     return dataframes
 
+print(db.getNames())
 upload(db.getNames(), todf(db.getReadings()))
 
 """ while 1:
