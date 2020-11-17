@@ -29,10 +29,9 @@ def todf(list):
         frame.set_index('date', inplace=True)
     return dataframes
 
-print(db.getNames())
-upload(db.getNames(), todf(db.getReadings()))
-
-""" while 1:
+counter = 0
+while 1:
+    counter += 1
     availableDevices = bleconn.scanTool()
     dbSensors = db.getSensors()
     readings = db.getReadings()
@@ -42,4 +41,8 @@ upload(db.getNames(), todf(db.getReadings()))
         for i in range(len(matches)):
             print(matches[i])
             print(vals[i])
-            db.insertReading(matches[i][1], vals[i]) """
+            db.insertReading(matches[i][1], vals[i])
+
+    if counter == 10:
+        upload(db.getNames(), todf(db.getReadings()))
+        counter = 0
