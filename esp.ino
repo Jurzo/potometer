@@ -5,6 +5,7 @@
 
 #define uS_TO_S_FACTOR 1000000ULL /* Conversion factor for micro seconds to seconds */
 #define TIME_TO_SLEEP 60          /* Time ESP32 will go to sleep (in seconds) */
+#define TIME_TO_WAIT 30
 #define SERVICE_UUID "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
 #define SENSOR_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 #define SensorPin 34
@@ -113,7 +114,7 @@ void loop()
 {
     delay(1000);
     Serial.println("waiting...");
-    if (millis() / 1000 > TIME_TO_SLEEP / 2)
+    if (millis() / 1000 > TIME_TO_WAIT)
     {
         sleep();
     }
