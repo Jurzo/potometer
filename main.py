@@ -20,13 +20,14 @@ def todf(list):
     dataframes = []
     for i, datapoint in enumerate(list):
         if (datapoint[0] != current):
-            dataframes.append(pd.DataFrame([n[1:] for n in list[lastIndex:i]], columns=["date", "hour", "value"]))
+            dataframes.append(pd.DataFrame([n[1:] for n in list[lastIndex:i]], columns=["date", "time", "value"]))
             current = datapoint[0]
             lastIndex = i
         if (i == len(list) - 1):
-            dataframes.append(pd.DataFrame([n[1:] for n in list[lastIndex:len(list)]], columns=["date", "hour", "value"]))
+            dataframes.append(pd.DataFrame([n[1:] for n in list[lastIndex:len(list)]], columns=["date", "time", "value"]))
     return dataframes
 
+upload(db.getNames(), todf(db.getReadings()))
 counter = 0
 while 1:
     counter += 1

@@ -59,7 +59,7 @@ def getReadings():
     try:
         conn = mysql.connector.connect(**config)
         cur = conn.cursor()
-        cur.execute("""select s.name, date(r.dt), hour(r.dt), r.value, s.mac, c.uuid 
+        cur.execute("""select s.name, date(r.dt), date_format(r.dt, '%H:%i'), r.value, s.mac, c.uuid 
             from sensors s 
             join characteristics c on s.mac = c.mac 
             left join reading r on r.uuid = c.uuid 
