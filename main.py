@@ -2,7 +2,10 @@ import bleconn
 import db
 import sheets
 import pandas as pd
+import time
 
+#upload cycle in seconds
+uploadCycle = 600
 
 def upload(headers, data):
     sheetDriver = sheets.SheetDriver()
@@ -27,21 +30,25 @@ def todf(list):
             dataframes.append(pd.DataFrame([n[1:] for n in list[lastIndex:len(list)]], columns=["date", "time", "value"]))
     return dataframes
 
-upload(db.getNames(), todf(db.getReadings()))
-counter = 0
-while 1:
-    counter += 1
-    availableDevices = bleconn.scanTool()
-    dbSensors = db.getSensors()
-    readings = db.getReadings()
-    matches = [device for device in dbSensors if device[0] in availableDevices]
-    if matches:
-        vals = bleconn.readSensors(matches)
-        for i in range(len(matches)):
-            print(matches[i])
-            print(vals[i])
-            db.insertReading(matches[i][1], vals[i])
+def main():
+    upload(db.getNames(), todf(db.getReadings()))
+    lastUpload = time.perf_counter_ns()
+    while 1:
+        availableDevices = bleconn.scanTool()
+        dbSensors = db.getSensors()
+        readings = db.getReadings()
+        matches = [device for device in dbSensors if device[0] in availableDevices]
+        if matches:
+            vals = bleconn.readSensors(matches)
+            for i in range(len(matches)):
+                print(matches[i])
+                print(vals[i])
+                db.insertReading(matches[i][1], vals[i])
 
-    if counter == 10:
-        upload(db.getNames(), todf(db.getReadings()))
-        counter = 0
+        currentTime = time.perf_counter_ns()
+        if currentTime - lastUpload > uploadCycle * 1000000000:
+            upload(db.getNames(), todf(db.getReadings()))
+            lastUpload = currentTime
+
+if __name__ == '__main__':
+    main()
