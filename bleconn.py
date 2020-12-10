@@ -13,17 +13,19 @@ def readSensors(sensors):
             if value == -1:
                 sensor = sensors[index]
                 try:
-                    device = adapter.connect(sensor[0])
-                    reading = int.from_bytes(device.char_read(sensor[1]), "little")
-                    device.char_write(sensor[1], bytes(1), wait_for_response=False)
+                    print("connecting", sensor[1])
+                    device = adapter.connect(sensor[1])
+                    print("reading", sensor[2])
+                    reading = int.from_bytes(device.char_read(sensor[2]), "little")
+                    device.char_write(sensor[2], bytes(1), wait_for_response=False)
                     values[index] = reading
                 except KeyboardInterrupt:
                     exit()
                 except:
-                    print("Round:", i, "Failed to read from device: ", sensor)
+                    print("Round:", i, "Failed to read from device:", sensor)
         i += 1
     adapter.stop()
-    return values
+    return zip([sensor[2] for sensor in sensors], values)
 
 def scan():
     subprocess.call("./scanner.sh")

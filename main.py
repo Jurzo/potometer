@@ -31,23 +31,27 @@ def todf(list):
     return dataframes
 
 def checkNewDevices(found, known):
+    print(found)
+    print(known)
     for device in found:
         if not device['address'] in known:
             db.insertDevice(device['address'], device['name'])
 
 
 def main():
-    upload(db.getNames(), todf(db.getReadings()))
+    ###upload(db.getNames(), todf(db.getReadings()))
     lastUpload = time.perf_counter_ns()
     while 1:
         foundDevices = bleconn.scanTool()
         foundDevices = [device for device in foundDevices if device['name'] != None]
         myFoundDevices = [device for device in foundDevices if device['name'].split(" ")[0] == "Pot-o-meter"]
+        deviceNames = [device['name'] for device in myFoundDevices]
         dbSensors = db.getSensors()
-        checkNewDevices(myFoundDevices, dbSensors)
+        checkNewDevices(myFoundDevices, [device[1] for device in dbSensors])
         ###matches = [device for device in dbSensors if device[0] in myFoundDevices]
+        dbSensors = db.getSensors()
         if myFoundDevices:
-            vals = bleconn.readSensors([device['address'] for device in myFoundDevices])
+            vals = bleconn.readSensors([device for device in dbSensors if device[0] in deviceNames])
             for i in range(len(myFoundDevices)):
                 print(myFoundDevices[i])
                 db.insertReading(myFoundDevices[i][1], vals[i])
