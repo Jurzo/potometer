@@ -41,6 +41,7 @@ def main():
     lastUpload = time.perf_counter_ns()
     while 1:
         foundDevices = bleconn.scanTool()
+        foundDevices = [device for device in foundDevices if device['name'] != None]
         myFoundDevices = [device for device in foundDevices if device['name'].split(" ")[0] == "Pot-o-meter"]
         dbSensors = db.getSensors()
         checkNewDevices(myFoundDevices, dbSensors)
