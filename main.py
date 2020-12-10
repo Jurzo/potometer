@@ -39,7 +39,7 @@ def checkNewDevices(found, known):
 
 
 def main():
-    ###upload(db.getNames(), todf(db.getReadings()))
+    upload(db.getNames(), todf(db.getReadings()))
     lastUpload = time.perf_counter_ns()
     while 1:
         foundDevices = bleconn.scanTool()

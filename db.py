@@ -75,7 +75,7 @@ def getReadings():
         cur.execute("""select s.name, date(r.dt), date_format(r.dt, '%H:%i'), r.value, s.mac, c.uuid 
             from sensors s 
             join characteristics c on s.mac = c.mac 
-            left join reading r on r.uuid = c.uuid 
+            left join reading r on r.mac = s.mac 
             order by s.name, r.dt desc
             limit 100""")
         for item in cur:
