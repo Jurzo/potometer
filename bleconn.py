@@ -13,9 +13,9 @@ def readSensors(sensors):
             if value == -1:
                 sensor = sensors[index]
                 try:
-                    print("connecting", sensor[1])
+                    print("connecting to address:", sensor[1])
                     device = adapter.connect(sensor[1])
-                    print("reading", sensor[2])
+                    print("reading char:", sensor[2])
                     reading = int.from_bytes(device.char_read(sensor[2]), "little")
                     device.char_write(sensor[2], bytes(1), wait_for_response=False)
                     values[index] = reading

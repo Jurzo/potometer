@@ -31,10 +31,9 @@ def todf(list):
     return dataframes
 
 def checkNewDevices(found, known):
-    print(found)
-    print(known)
     for device in found:
         if not device['address'] in known:
+            print("Adding device", device, "to database")
             db.insertDevice(device['address'], device['name'])
 
 
