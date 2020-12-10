@@ -25,7 +25,7 @@ def readSensors(sensors):
                     print("Round:", i, "Failed to read from device:", sensor)
         i += 1
     adapter.stop()
-    return zip([sensor[2] for sensor in sensors], values)
+    return zip([sensor[1] for sensor in sensors], values)
 
 def scan():
     subprocess.call("./scanner.sh")

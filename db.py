@@ -52,14 +52,14 @@ def insertDevice(mac, name):
         print(err)
     return False
 
-def insertReading(uuid, value=-1):
+def insertReading(mac, value=-1):
     try:
         conn = mysql.connector.connect(**config)
         cur = conn.cursor()
         if value == -1:
-            cur.execute("INSERT INTO reading (uuid, dt) VALUES (%s, NOW())", (uuid))
+            cur.execute("INSERT INTO reading (mac, dt) VALUES (%s, NOW())", (mac))
         else:
-            cur.execute("INSERT INTO reading (uuid, dt, value) VALUES (%s, NOW(), %s)", (uuid, value))
+            cur.execute("INSERT INTO reading (mac, dt, value) VALUES (%s, NOW(), %s)", (mac, value))
         conn.commit()
         conn.close()
         return True

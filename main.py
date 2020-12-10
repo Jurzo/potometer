@@ -54,7 +54,7 @@ def main():
             vals = bleconn.readSensors([device for device in dbSensors if device[0] in deviceNames])
             for i in range(len(myFoundDevices)):
                 print(myFoundDevices[i])
-                db.insertReading(myFoundDevices[i][1], vals[i])
+                db.insertReading(vals[i][0], vals[i][1])
 
         currentTime = time.perf_counter_ns()
         if currentTime - lastUpload > uploadCycle * 1000000000:
