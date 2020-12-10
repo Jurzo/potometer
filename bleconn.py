@@ -1,5 +1,4 @@
 import pygatt
-import time
 import subprocess
 
 adapter = pygatt.GATTToolBackend()
@@ -43,7 +42,7 @@ def scan():
 def scanTool():
     try:
         adapter.start()
-        addrs = [device['address'] for device in adapter.scan()]
+        addrs = [device for device in adapter.scan()]
         adapter.stop()
         return addrs
     except:

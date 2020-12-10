@@ -39,6 +39,19 @@ def getNames():
         print(err)
     return names
 
+def insertDevice(mac, name):
+    try:
+        conn = mysql.connector.connect(**config)
+        cur = conn.cursor()
+        cur.execute("INSERT INTO device (mac, name) VALUES (%s, %s)", (mac, name))
+        cur.execute("INSERT INTO characteristics (uuid, mac) VALUES (%s, %s)", ("beb5483e-36e1-4688-b7f5-ea07361b26a8", mac))
+        conn.commit()
+        conn.close()
+        return True
+    except mysql.connector.Error as err:
+        print(err)
+    return False
+
 def insertReading(uuid, value=-1):
     try:
         conn = mysql.connector.connect(**config)

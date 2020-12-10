@@ -30,20 +30,27 @@ def todf(list):
             dataframes.append(pd.DataFrame([n[1:] for n in list[lastIndex:len(list)]], columns=["date", "time", "value"]))
     return dataframes
 
+def checkNewDevices(found, known):
+    for device in found:
+        if not device['address'] in known:
+            db.insertDevice(device['address'], device['name'])
+
+
 def main():
     upload(db.getNames(), todf(db.getReadings()))
     lastUpload = time.perf_counter_ns()
     while 1:
-        availableDevices = bleconn.scanTool()
+        foundDevices = bleconn.scanTool()
+        myFoundDevices = [device for device in foundDevices if device['name'].split(" ")[0] == "Pot-o-meter"]
         dbSensors = db.getSensors()
-        readings = db.getReadings()
-        matches = [device for device in dbSensors if device[0] in availableDevices]
-        if matches:
-            vals = bleconn.readSensors(matches)
-            for i in range(len(matches)):
-                print(matches[i])
-                print(vals[i])
-                db.insertReading(matches[i][1], vals[i])
+        checkNewDevices(myFoundDevices, dbSensors)
+        ###matches = [device for device in dbSensors if device[0] in myFoundDevices]
+        if myFoundDevices:
+            vals = bleconn.readSensors(myFoundDevices)
+            for i in range(len(myFoundDevices)):
+                print(myFoundDevices[i])
+                print(myFoundDevices[i])
+                db.insertReading(myFoundDevices[i][1], vals[i])
 
         currentTime = time.perf_counter_ns()
         if currentTime - lastUpload > uploadCycle * 1000000000:
