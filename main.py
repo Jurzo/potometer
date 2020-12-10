@@ -47,9 +47,8 @@ def main():
         checkNewDevices(myFoundDevices, dbSensors)
         ###matches = [device for device in dbSensors if device[0] in myFoundDevices]
         if myFoundDevices:
-            vals = bleconn.readSensors(myFoundDevices)
+            vals = bleconn.readSensors([device['address'] for device in myFoundDevices])
             for i in range(len(myFoundDevices)):
-                print(myFoundDevices[i])
                 print(myFoundDevices[i])
                 db.insertReading(myFoundDevices[i][1], vals[i])
 
