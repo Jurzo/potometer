@@ -14,6 +14,7 @@ import time
 from waveshare_epd import epd7in5
 from Screen import Screen
 from Img import ImageCreator
+import time as t
 
 logging.basicConfig(level=logging.DEBUG)
 logging.info("Pot-o-Meter")
@@ -86,4 +87,16 @@ def main():
             lastUpload = currentTime
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except IOError as e:
+        logging.info(e)
+    
+    except KeyboardInterrupt:    
+        logging.info("ctrl + c:")
+    
+    finally:
+        screen.clear()
+        t.sleep(4)
+        epd7in5.epdconfig.module_exit()
+        exit()
