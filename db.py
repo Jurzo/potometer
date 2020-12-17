@@ -97,7 +97,7 @@ def getLowestReadings():
             order by r.value asc
             limit 5""")
         for item in cur:
-            readings.append([item[0], item[1]])
+            readings.append([item[0], str(item[1])])
 
         conn.close()
     except mysql.connector.Error as err:

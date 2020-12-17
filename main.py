@@ -61,6 +61,7 @@ def checkNewDevices(found, known):
 
 
 def main():
+    updateScreen(db.getLowestReadings())
     upload(db.getNames(), todf(db.getReadings()))
     lastUpload = time.perf_counter_ns()
     while 1:
@@ -81,7 +82,7 @@ def main():
         currentTime = time.perf_counter_ns()
         if currentTime - lastUpload > uploadCycle * 1000000000:
             upload(db.getNames(), todf(db.getReadings()))
-            updateScreen(db.getLowestReadings)
+            updateScreen(db.getLowestReadings())
             lastUpload = currentTime
 
 if __name__ == '__main__':
