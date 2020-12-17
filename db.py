@@ -86,15 +86,15 @@ def getReadings():
         print(err)
     return readings
 
-def getLowestReadings():
+def getCurrentReadings():
     readings = []
     try:
         conn = mysql.connector.connect(**config)
         cur = conn.cursor()
-        cur.execute("""select distinct s.name, r.value
+        cur.execute("""select distinct s.name, r.value, r.dt
             from sensors s 
             join reading r on r.mac = s.mac 
-            order by r.value asc
+            order by r.dt desc
             limit 5""")
         for item in cur:
             readings.append([item[0], str(item[1])])
@@ -103,4 +103,3 @@ def getLowestReadings():
     except mysql.connector.Error as err:
         print(err)
     return readings
-
