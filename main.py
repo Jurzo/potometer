@@ -1,11 +1,34 @@
+import sys
+import os
+picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'pic')
+libdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'lib')
+if os.path.exists(libdir):
+    sys.path.append(libdir)
+
+import logging
 import bleconn
 import db
 import sheets
 import pandas as pd
 import time
+from waveshare_epd import epd7in5
+from Screen import Screen
+from Img import ImageCreator
+
+logging.basicConfig(level=logging.DEBUG)
+logging.info("Pot-o-Meter")
+
+screen = Screen()
+img = ImageCreator()
 
 #upload cycle in seconds
-uploadCycle = 600
+uploadCycle = 10
+
+def updateScreen(data):
+    img.initiate()
+    for y, line in enumerate(data):
+        img.write(line[0] + ": " + line[1], 42, (10, y*50))
+    screen.draw(img.getImg())
 
 def upload(headers, data):
     sheetDriver = sheets.SheetDriver()
@@ -58,6 +81,7 @@ def main():
         currentTime = time.perf_counter_ns()
         if currentTime - lastUpload > uploadCycle * 1000000000:
             upload(db.getNames(), todf(db.getReadings()))
+            updateScreen(db.getLowestReadings)
             lastUpload = currentTime
 
 if __name__ == '__main__':
