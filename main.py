@@ -62,9 +62,12 @@ def checkNewDevices(found, known):
 
 
 def main():
+    print('update screen')
     updateScreen(db.getCurrentReadings())
+    print('upload')
     upload(db.getNames(), todf(db.getReadings()))
     lastUpload = time.perf_counter_ns()
+    print('test')
     while 1:
         foundDevices = bleconn.scanTool()
         foundDevices = [device for device in foundDevices if device['name'] != None]

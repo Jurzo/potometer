@@ -26,6 +26,7 @@ def getSensors():
     return sensors
 
 def getNames():
+    print('getting names')
     names = []
     try:
         conn = mysql.connector.connect(**config)
@@ -44,7 +45,7 @@ def insertDevice(mac, name):
         conn = mysql.connector.connect(**config)
         cur = conn.cursor()
         cur.execute("INSERT INTO sensors (mac, name) VALUES (%s, %s)", (mac, name))
-        cur.execute("INSERT INTO characteristics (uuid, mac) VALUES (%s, %s)", ("4fafc201-1fb5-459e-8fcc-c5c9c331914b", mac))
+        cur.execute("INSERT INTO characteristics (uuid, mac) VALUES (%s, %s)", ("beb5483e-36e1-4688-b7f5-ea07361b26a8", mac))
         conn.commit()
         conn.close()
         return True
@@ -68,6 +69,7 @@ def insertReading(mac, value=-1):
     return False
 
 def getReadings():
+    print('getting readings')
     readings = []
     try:
         conn = mysql.connector.connect(**config)
@@ -84,6 +86,7 @@ def getReadings():
         conn.close()
     except mysql.connector.Error as err:
         print(err)
+    print('readings done')
     return readings
 
 def getCurrentReadings():
