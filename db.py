@@ -88,10 +88,14 @@ def getCurrentReadings():
     try:
         conn = mysql.connector.connect(**config)
         cur = conn.cursor()
-        cur.execute("""select distinct s.name, r.value, MAX(r.dt)
+        cur.execute("""select s.name, r.value, r.dt
             from sensors s 
             join reading r on r.mac = s.mac 
-            group by s.name
+            where r.dt in (
+                select max(dt) dt
+                from reading
+                group by mac
+            )
             limit 5""")
         for item in cur:
             readings.append([item[0], str(item[1])])
