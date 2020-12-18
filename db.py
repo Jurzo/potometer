@@ -44,7 +44,7 @@ def insertDevice(mac, name):
         conn = mysql.connector.connect(**config)
         cur = conn.cursor()
         cur.execute("INSERT INTO sensors (mac, name) VALUES (%s, %s)", (mac, name))
-        cur.execute("INSERT INTO characteristics (uuid, mac) VALUES (%s, %s)", ("beb5483e-36e1-4688-b7f5-ea07361b26a8", mac))
+        cur.execute("INSERT INTO characteristics (uuid, mac) VALUES (%s, %s)", ("4fafc201-1fb5-459e-8fcc-c5c9c331914b", mac))
         conn.commit()
         conn.close()
         return True
