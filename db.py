@@ -26,7 +26,6 @@ def getSensors():
     return sensors
 
 def getNames():
-    print('getting names')
     names = []
     try:
         conn = mysql.connector.connect(**config)
@@ -57,10 +56,7 @@ def insertReading(mac, value=-1):
     try:
         conn = mysql.connector.connect(**config)
         cur = conn.cursor()
-        if value == -1:
-            cur.execute("INSERT INTO reading (mac, dt) VALUES (%s, NOW())", (mac))
-        else:
-            cur.execute("INSERT INTO reading (mac, dt, value) VALUES (%s, NOW(), %s)", (mac, value))
+        cur.execute("INSERT INTO reading (mac, dt, value) VALUES (%s, NOW(), %s)", (mac, value))
         conn.commit()
         conn.close()
         return True
@@ -69,7 +65,6 @@ def insertReading(mac, value=-1):
     return False
 
 def getReadings():
-    print('getting readings')
     readings = []
     try:
         conn = mysql.connector.connect(**config)
@@ -86,7 +81,6 @@ def getReadings():
         conn.close()
     except mysql.connector.Error as err:
         print(err)
-    print('readings done')
     return readings
 
 def getCurrentReadings():

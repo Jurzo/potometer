@@ -16,9 +16,9 @@ def readSensors(sensors):
                     print("connecting to address:", sensor[1])
                     device = adapter.connect(sensor[1])
                     print("reading char:", sensor[2])
-                    reading = int.from_bytes('4fafc201-1fb5-459e-8fcc-c5c9c331914b', "little")
+                    reading = int.from_bytes(sensor[2], "little")
                     print('writing char')
-                    device.char_write('4fafc201-1fb5-459e-8fcc-c5c9c331914b', bytes(1), wait_for_response=False)
+                    device.char_write(sensor[2], bytes(1), wait_for_response=False)
                     print('char written')
                     values[index] = reading
                 except KeyboardInterrupt:
